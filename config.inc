@@ -1,0 +1,2 @@
+<?php
+$PATH = "/jonathankoff.com/";

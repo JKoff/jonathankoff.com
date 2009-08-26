@@ -1,47 +1,42 @@
-<?php ob_start("ob_gzhandler"); ?>
+<?php	//ob_start("ob_gzhandler"); // Comment to remove GZIP output. ?>
+<?php	include("config.inc");
+		include("init.inc");
+		/**
+			VARIABLES:
+			$files: An array of filename strings
+		*/
+?>
 <html>
-<?php
-$content = trim(file_get_contents("files.csv"));
-$files = explode(",", $content);
-?>
-<head>
-</head>
-<body onload="reparse()">
-<div id="navig">
-<ul>
-<?php
-foreach($files as $ctr => $file) {
-$fileparts = explode(".", $file);
-?>
-<li><a href="index.php#<?php echo $fileparts[0]; ?>" onclick="reparse1('<?php echo $fileparts[0]; ?>')"><?php echo $fileparts[0]; ?></a></li>
-<?php
-}
-?>
-</ul>
-</div>
-
-<?php
-foreach($files as $ctr => $file) {
-$fileparts = explode(".", $file);
-?>
-<div id="<?php echo $fileparts[0]; ?>" class="dynamic_container" style="display:none">
-<?php echo file_get_contents($file); ?>
-</div>
-<?php
-}
-?>
-
-<script type="text/javascript">
-<!--
-<?php
-include("jsmin-1.1.1.php");
-$content = eval("?>".file_get_contents("dynamic.js"));
-echo JSMin::minify($content);
-/*echo eval("?> ".file_get_contents("dynamic.js"));*/
-?>
--->
-</script>
-
-</body>
+	<head>
+		<script type="text/javascript" src="<?php echo $PATH; ?>historyState.js"></script>
+		<style type="text/css">
+			.js { display:none }
+			.nojs { display:inline }
+		</style>
+	</head>
+	<body>
+<?php	flush(); ?>
+		<div class="js">
+			<ul>
+<?php			printNavig("<li><a href='#%s' onclick='reparse1(\"%s\")'>%s</a></li>");	?>
+			</ul>
+		</div>
+<?php	flush(); ?>
+		<div class="nojs">
+			<ul>
+<?php			printNavig("<li><a href='$PATH%s/'>%s</a></li>");	?>
+			</ul>
+		</div>
+<?php	flush(); ?>
+		<div>
+			<div id="content">
+<?php			printContent();	?>
+			</div>
+		</div>
+<?php	flush(); ?>
+<?php	include("dynamic.inc");	?>
+	</body>
 </html>
+
+<?php stop_and_reveal_timer(); ?>
 
