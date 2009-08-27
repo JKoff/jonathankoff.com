@@ -1,2 +1,3 @@
 <?php
-$PATH = "/jonathankoff.com/";
+$PATH = "/jonathankoff.com";
+$CACHEDIR = "cache/";

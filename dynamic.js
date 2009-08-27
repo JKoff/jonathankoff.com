@@ -32,7 +32,6 @@ if (document.getElementsByClassName == undefined) {
 		return results;
 	}
 }
-reparse();
 }
 
 function setIdDisplay(objId, nDisplay) {
@@ -51,15 +50,44 @@ function setIdContent(id, file) {
 	if(obj)
 		obj.innerHTML = fileContentArray[file];
 }
-function reparse() {
-	setClassDisplay("js", "inline");
-	setClassDisplay("nojs", "none");
-    if(location.hash)
-        setIdContent("content", location.hash.substring(1));
-    /*else
-        setIdContent("content", "home");*/
+function initNav() {
+	var anchors, i, len, anchor, href, section, currentSection;
+	anchors = document.getElementById("nav").getElementsByTagName("a");
+	for (i = 0, len = anchors.length; i < len; i++) {
+		anchor = anchors[i];
+		YAHOO.util.Event.addListener(anchor, "click", function (evt) {
+			href = this.getAttribute("href");
+			patharr = href.split('/');
+			section = patharr[patharr.length-2] || "home";
+			try {
+				YAHOO.util.History.navigate("page", section);
+			} catch(e) {
+				setIdContent("content", section);
+			}
+			YAHOO.util.Event.preventDefault(evt);
+		});
+	}
+	currentSection = YAHOO.util.History.getCurrentState("page");
+	setIdContent("content", currentSection);
 }
-function reparse1(arg) {
-	if(arg) setIdContent("content", arg);
+var bookmarkedState = YAHOO.util.History.getBookmarkedState("page");
+var href = ""+window.location;
+var patharr = href.split('/');
+var section = patharr[patharr.length-2] || "home";
+var querySection = section;
+if(!fileContentArray[querySection])
+	querySection = "home";
+var initialState = bookmarkedState || querySection || "home";
+YAHOO.util.History.register("page", initialState, function (state) {
+	if(state) setIdContent("content", state);
+});
+YAHOO.util.History.onReady(function() {
+	initNav();
+});
+try {
+	YAHOO.util.History.initialize("yui-history-field", "yui-history-iframe");
+} catch (e) {
+	setIdContent("content", "home");
 }
+
 

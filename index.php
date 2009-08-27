@@ -8,23 +8,26 @@
 ?>
 <html>
 	<head>
-		<script type="text/javascript" src="<?php echo $PATH; ?>historyState.js"></script>
 		<style type="text/css">
-			.js { display:none }
-			.nojs { display:inline }
+<?php	if(ae_detect_ie()) {	?>
+			#yui-history-iframe {
+				position:absolute;
+				top:0; left:0;
+				width:1px; height:1px;
+				visibility:hidden;
+			}
+<?php	}	?>
 		</style>
 	</head>
 	<body>
+<?php	if(ae_detect_ie()) {	?>
+			<iframe id="yui-history-iframe" src="empty.html"></iframe>
+<?php	}	?>
+	<input id="yui-history-field" type="hidden" />
 <?php	flush(); ?>
-		<div class="js">
+		<div id="nav">
 			<ul>
-<?php			printNavig("<li><a href='#%s' onclick='reparse1(\"%s\")'>%s</a></li>");	?>
-			</ul>
-		</div>
-<?php	flush(); ?>
-		<div class="nojs">
-			<ul>
-<?php			printNavig("<li><a href='$PATH%s/'>%s</a></li>");	?>
+<?php			printNavig("<li><a href='$PATH/%s/'>%s</a></li>");	?>
 			</ul>
 		</div>
 <?php	flush(); ?>
