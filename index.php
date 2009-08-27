@@ -7,8 +7,12 @@
 			header('Content-Encoding: gzip');
 			$indexcachefile = $CACHEDIR."index.php.gz";
 		}
+		if($MASKSRV) {
+			header('X-Powered-By: Pigeons');
+		}
 		if(!file_has_changed($indexcachefile, "../index.php", $INCLUDEDIR."init.inc", $INCLUDEDIR."cache.inc", $INCLUDEDIR."dynamic.inc")) {
-			header("ETag: \"".getETag($indexcachefile)."\"");
+			date_default_timezone_set('UTC');
+			//header("ETag: \"".getETag($indexcachefile)."\"");
 			header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T",filemtime($indexcachefile)));
 			if(isset($_SERVER['HTTP_IF_NONE_MATCH']) &&
 			$_SERVER['HTTP_IF_NONE_MATCH'] == "\"".getETag($indexcachefile)."\"") {
@@ -82,7 +86,9 @@
 		$fp = fopen($indexcachefile, 'w');
 		fwrite($fp, $indexfin);
 		fclose($fp);
-		header("ETag: ",getETag($indexcachefile));
+		date_default_timezone_set('UTC');
+		//header("ETag: ",getETag($indexcachefile));
+		header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T",filemtime($indexcachefile)));
 		echo $indexfin;
 	}
 ?>

@@ -1,9 +1,29 @@
 Instructions:
+
 Note that in the following instructions, 'files/', 'css/', and so on refer to the default paths for their respective types of content, as set in /config.inc.
+
 To modify content, modify HTML files in 'files/'. Keep in mind that they get parsed as PHP, with config.php automatically included, in order to allow for dynamic content and access to the $PATH variable.
+
 To modify CSS, modify files in 'css/'. CSS files are present for: default, IE, IE7-, IE6-.
+
 To modify page titles, modify the second line of files.csv.
+
 To add a page, add relevant entries in files.csv, create a new file in 'files/', create a new directory named after the file, and place the same index.php in this directory as in other content files' directories (i.e. 'about/').
+
 To add content in between the <head> tags, place it in 'files/header.html'.
+
 A 'images/' directory exists for images, but it has no particular hard-coded significance, and its usage is not a requirement.
-To clear the cache for a specific file, remove it from the 'cache/' directory. If you remove the entire directory, you will have to create a new, empty, chmodded one before caching (or possibly the site) will work.
+
+To clear the cache for a specific file, remove it from the 'cache/' directory. If you remove the entire directory, you will have to create a new, empty, chmodded one. Failure to do so will result in undefined behavior.
+
+
+Apache Configuration:
+
+Disable ETags if Last-Modified is supported.
+
+Another recommended change is to hide the Server information in the HTTP header with ServerTokens.
+
+	Example Config:
+FileETag none
+ServerSignature Off
+ServerTokens Prod

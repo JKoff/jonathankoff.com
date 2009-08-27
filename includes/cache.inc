@@ -6,7 +6,7 @@ function file_has_changed() {
 	$lines = explode("\n", $content);
 	$files = explode(",", $lines[0]);
 	$titles = explode(",", $lines[1]);
-	array_push($files, "config.php", "js/dynamic.js", "js/yahoo-min.js", "js/event-min.js", "js/history-min.js");
+	array_push($files, "../config.inc", "js/dynamic.js", "js/yahoo-min.js", "js/event-min.js", "js/history-min.js");
 	$nargs = func_num_args(); $arg_list = func_get_args();
 	$timefile = $arg_list[0];
 	for($i=1; $i < $nargs; $i++) {
