@@ -16,7 +16,7 @@ A 'images/' directory exists for images, but it has no particular hard-coded sig
 
 To clear the cache for a specific file, remove it from the 'cache/' directory. If you remove the entire directory, you will have to create a new, chmodded one. Failure to do so will result in undefined behavior.
 
-To add an embedded (data: URL) image, you must use the addEmbeddedImageToCSS(id, file); function. It returns part of the div (the <div id="$id"), assumes that file is in 'images/', and adds the image to a database, to be added to the CSS, and possibly MHTML (for IE.)
+To add an embedded (data: URL) image, you must use the addEmbeddedImageToCSS(id, file); function. It returns part of the div (the <div id="$id"), assumes that file is in 'images/', and adds the image to a database, to be added to the CSS, and possibly MHTML (for IE.) Keep in mind that you cannot use an id that begins with an underscore. Due to IE8, data: URLs cannot be more than 32 KB in length.
 
 Apache Configuration:
 

@@ -21,34 +21,15 @@ function ae_detect_ie()
     else
         return false;
 }
-
-/*
-if(ae_detect_ie()) {
-	$imgscontent = trim(file_get_contents("images.csv"));
-	$imgs = explode(",", $imgscontent);
-	
-	$sep = "_ANY_STRING_WILL_DO_AS_A_SEPARATOR";
-	
-	if(is_ie_on_vista() && !isset($_GET['plaintext']) ){
-		//$FULL_REQUEST_URI = 'http://'.$_SERVER['HTTP_HOST'].
-		$uri = $FULL_REQUEST_URI;
-		if(empty($_SERVER['QUERY_STRING'])){
-			$uri .= '?';	
-		}else{
-			$uri .= '&';
-		}
-		$uri = 'mhtml:' . $uri . 'plaintext=1';
-		header('Location: ' . $uri);
-		exit;
-	}
-	
-	header("Content-Type: multipart/related; boundary=\"$sep\"");
-	
-	foreach($imgs as $img) {
-		echo "\r\n
-	}
+function ae_detect_ie8()
+{
+    if(isset($_SERVER['HTTP_USER_AGENT']) && 
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8') !== false))
+        return true;
+    else
+        return false;
 }
-*/
+
 function printNavig($fmt) {
 	global $files;
 	foreach($files as $filepath) {
@@ -74,28 +55,57 @@ function addEmbeddedImageToCSS($id, $file) {
 	global $IMGDIR;
 	global $cssids;
 	$file = $IMGDIR.$file;
+	
 	$sz = getimagesize($file);
 	$w = $sz[0];
 	$h = $sz[1];
-    $fmt = "background:url(\"%s\") top left no-repeat; width:$w"."px; height:$h"."px;";
 	$outfmt = "<div id='$id'";
-    if(ae_detect_ie()) {
-        $cssids[$id] = sprintf($fmt, $file);
-        //$uri = 'http://'.$_SERVER['HTTP_HOST'
-    } else {
-        $fileparts = explode(".", $file);
-        $fileext = $fileparts[count($fileparts)-1];
-        $img = file_get_contents($file);
-        $b64 = chunk_split(base64_encode($img));
-        $bad = "data:image/$fileext;base64,".$b64;
-        $good = str_replace("\r\n", "\\\r\n", $bad);
+	
+	$fileparts = explode(".", $file);
+	$fileext = $fileparts[count($fileparts)-1];
+	$img = file_get_contents($file);
+	$b64 = chunk_split(base64_encode($img));
+	
+    if(ae_detect_ie() && !ae_detect_ie8()) {
+		$cssids["__$id"] = $b64;
+		//$good = $file;
+		$good = "mhtml:http://$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]!$id";
+		$fmt = "background:url(%s) top left no-repeat; width:$w"."px; height:$h"."px;";
         $cssids[$id] = sprintf($fmt, $good);
+    } else if(ae_detect_ie8()) {
+		$b2 = base64_encode($img);
+		$good = "data:image/$fileext;base64,".$b2;
+		$fmt = "background:url(%s) top left no-repeat; width:$w"."px; height:$h"."px;";
+		$cssids[$id] = sprintf($fmt, $good);
+	} else {
+		$bad = "data:image/$fileext;base64,".$b64;
+		$good = str_replace("\r\n", "\\\r\n", $bad);
+		$fmt = "background:url(\"%s\") top left no-repeat; width:$w"."px; height:$h"."px;";
+		$cssids[$id] = sprintf($fmt, $good);
     }
 	printf($outfmt);
 }
 function output_computed_css() {
 	global $cssids;
+	if(ae_detect_ie8())
+	if(ae_detect_ie() && !ae_detect_ie8()) {
+		echo "/*\r\n";
+		echo "Content-Type: multipart/related; boundary=\"_ANY_STRING_WILL_DO_AS_A_SEPARATOR\"\r\n\r\n";
+	}
+	
 	foreach($cssids as $id => $expr) {
+		if($id[0] == "_") continue;
+		if(ae_detect_ie() && !ae_detect_ie8()) {
+			echo "--_ANY_STRING_WILL_DO_AS_A_SEPARATOR\r\n";
+			echo "Content-Location:$id\r\n";
+			echo "Content-Transfer-Encoding:base64\r\n\r\n";
+			echo $cssids["__$id"]."\r\n";
+		}
+	}
+	if(ae_detect_ie() && !ae_detect_ie8())
+		echo "*/\r\n\r\n";
+	foreach($cssids as $id => $expr) {
+		if($id[0] == "_") continue;
 		echo "div#$id { $expr }\n";
 	}
 }

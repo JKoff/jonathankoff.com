@@ -5,10 +5,11 @@
 ?>
 <?php	$br = 'gen';
 		if(ae_detect_ie()) $br = 'ie';
+		if(ae_detect_ie8()) $br = 'ie8';
 		$indexcachefile = $CACHEDIR."index.php.".$br;
 		if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip')) {
 			header('Content-Encoding: gzip');
-			$indexcachefile = $CACHEDIR."index.php.gz";
+			$indexcachefile = $CACHEDIR."index.php.gz".$br;
 		}
 		if($MASKSRV) {
 			header('X-Powered-By: Pigeons');
