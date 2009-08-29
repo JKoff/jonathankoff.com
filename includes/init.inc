@@ -9,6 +9,13 @@ $lines = explode("\n", $content);
 $files = explode(",", $lines[0]);
 $titles = explode(",", $lines[1]);
 
+function detect_opera() {
+    if(isset($_SERVER['HTTP_USER_AGENT']) && 
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'OPERA') !== false))
+        return true;
+    else
+		return false;
+}
 function is_ie_on_vista() {
 	$USER_AGENT = $_SERVER['HTTP_USER_AGENT'];
 	return (eregi("MSIE", $USER_AGENT) && eregi("Windows NT 6.0", $USER_AGENT));

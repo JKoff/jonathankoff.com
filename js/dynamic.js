@@ -1,4 +1,5 @@
-<?php	$content = trim(file_get_contents("files.csv"));
+<?php	if(detect_opera()) return;
+		$content = trim(file_get_contents("files.csv"));
 		$lines = explode("\n", $content);
 		$files = explode(",", $lines[0]);
 		$titles = explode(",", $lines[1]);
@@ -76,6 +77,7 @@ function setIdContent(id, file) {
 		obj.innerHTML = fileContentArray[file];
 	document.title = fileTitleArray[file];
 }
+<?php	if(!ae_detect_ie()) {	?>
 function initNav() {
 	var anchors, i, len, anchor, href, section, currentSection;
 	anchors = document.getElementById("nav").getElementsByTagName("a");
@@ -116,4 +118,26 @@ try {
 } catch (e) {
 	setIdContent("content", "home");
 }
+<?php	} else {	?>
+	window.dhtmlHistory.create({ toJSON: function(o) {
+			return JSON.stringify(o);
+		}, fromJSON: function(s) {
+			return JSON.parse(s);
+		}
+	});
+	
+	var yourListener = function(newLocation, historyData) {
+		if(newLocation.length < 2) return;
+		var historyMsg = (typeof historyData == "object" && historyData != null
+			? historyStorage.toJSON(historyData)
+			: historyData
+		);
+		setIdContent("content", newLocation);
+	}
+	
+	window.onload = function() {
+		dhtmlHistory.initialize();
+		dhtmlHistory.addListener(yourListener);
+	};
+<?php	}	?>
 

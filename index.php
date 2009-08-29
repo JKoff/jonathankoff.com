@@ -84,7 +84,8 @@
 <?php	jflush(); ?>
 		<div id="nav">
 			<ul>
-<?php			printNavig("<li><a href='$PATH%s/'>%s</a></li>");	?>
+<?php			if(ae_detect_ie()) printNavig("<li><a href='#%s'>%s</a></li>");
+				else printNavig("<li><a href='$PATH%s/'>%s</a></li>");	?>
 			</ul>
 		</div>
 <?php	jflush(); ?>
@@ -92,7 +93,7 @@
 <?php		printContent();	?>
 		</div>
 <?php	jflush(); ?>
-<?php	if(ae_detect_ie()) {	?>
+<?php	if(ae_detect_ie() && false) {	?>
 			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/history/history-min.js"></script>
 <?php	}	?>

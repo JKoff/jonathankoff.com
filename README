@@ -8,7 +8,7 @@ To modify CSS, modify files in 'css/'. CSS files are present for: default, IE, I
 
 To modify page titles, modify the second line of files.csv.
 
-To add a page, add relevant entries in files.csv, create a new file in 'files/', create a new directory named after the file, and place the same index.php in this directory as in other content files' directories (i.e. 'about/').
+To add a page, add relevant entries in files.csv, create a new file in 'files/', create a new directory named after the file, and place the same index.php and blank.html in this directory as in other content files' directories (i.e. 'about/').
 
 To add content in between the <head> tags, place it in 'files/header.html'.
 
