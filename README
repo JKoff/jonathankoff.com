@@ -16,6 +16,8 @@ A 'images/' directory exists for images, but it has no particular hard-coded sig
 
 To clear the cache for a specific file, remove it from the 'cache/' directory. If you remove the entire directory, you will have to create a new, empty, chmodded one. Failure to do so will result in undefined behavior.
 
+The images.csv file contains a CSV list of images that need to be sent as separate MHTML images, for IE support when using embedded images (data: URIs). Their URLs are relative to the 'images/' directory.
+
 
 Apache Configuration:
 

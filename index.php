@@ -1,8 +1,11 @@
-<?php	include("config.inc");
+<?php	ob_start();
+		include("config.inc");
 		include($INCLUDEDIR."init.inc");
 		function jflush() { }
 ?>
-<?php	$indexcachefile = $CACHEDIR."index.php";
+<?php	$br = 'gen';
+		if(ae_detect_ie()) $br = 'ie';
+		$indexcachefile = $CACHEDIR."index.php.".$br;
 		if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip')) {
 			header('Content-Encoding: gzip');
 			$indexcachefile = $CACHEDIR."index.php.gz";
@@ -10,10 +13,12 @@
 		if($MASKSRV) {
 			header('X-Powered-By: Pigeons');
 		}
+		ob_clean();
 		if(!file_has_changed($indexcachefile, "../index.php", $INCLUDEDIR."init.inc", $INCLUDEDIR."cache.inc", $INCLUDEDIR."dynamic.inc")) {
 			date_default_timezone_set('UTC');
 			//header("ETag: \"".getETag($indexcachefile)."\"");
 			header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T",filemtime($indexcachefile)));
+			header("Expires: ".gmdate("D, d M Y H:i:s \G\M\T",filemtime($indexcachefile)+$EXPIRETIME));
 			if(isset($_SERVER['HTTP_IF_NONE_MATCH']) &&
 			$_SERVER['HTTP_IF_NONE_MATCH'] == "\"".getETag($indexcachefile)."\"") {
 				header("HTTP/1.0 304 Not Modified");
@@ -28,12 +33,19 @@
 			echo file_get_contents($indexcachefile);
 		} else {
 			ob_start();
+			init_images();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title><?php printTitle(); ?></title>
 <?php	echo file_get_contents($FILEDIR."header.html");	?>
+<?php	if(ae_detect_ie()) {	?>
+			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/element/element-min.js"></script>
+			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/tabview/tabview-min.js"></script>
+			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/history/history-min.js"></script>
+<?php	}	?>
 		<style type="text/css">
 <?php	echo file_get_contents($CSSDIR."/default.css");	?>
 <?php	if(ae_detect_ie()) {	?>
@@ -58,6 +70,9 @@
 		</style>
 <![endif]-->
 <?php	}	?>
+		<style type="text/css">
+<?php		output_computed_css();	?>
+		</style>
 	</head>
 	<body>
 <?php	if(ae_detect_ie()) {	?>
@@ -67,7 +82,7 @@
 <?php	jflush(); ?>
 		<div id="nav">
 			<ul>
-<?php			printNavig("<li><a href='$PATH/%s/'>%s</a></li>");	?>
+<?php			printNavig("<li><a href='$PATH%s/'>%s</a></li>");	?>
 			</ul>
 		</div>
 <?php	jflush(); ?>
@@ -89,6 +104,7 @@
 		date_default_timezone_set('UTC');
 		//header("ETag: ",getETag($indexcachefile));
 		header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T",filemtime($indexcachefile)));
+		header("Expires: ".gmdate("D, d M Y H:i:s \G\M\T",time()+$EXPIRETIME));
 		echo $indexfin;
 	}
 ?>

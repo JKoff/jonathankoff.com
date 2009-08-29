@@ -10,9 +10,16 @@
 			$filepath = $FILEDIR.$filepath;
 			$content = str_replace("\"", "'", file_get_contents($filepath));
 			$content = str_replace("\n", " ", $content);
+			/*$content = str_replace("\r", " ", $content);*/
+			/*$content = str_replace("\\", "\\\\", $content);*/
 			
 			echo "fileContentArray['$filename'] = \"";
-			eval("?>".$content);
+			ob_start();
+			eval(" ?>".$content." <?php ");
+			$bad = ob_get_clean();
+			$bad = str_replace("\n", "\n\\", $bad);
+			$good = str_replace("\"", "'", $bad);
+			echo $good;
 			echo "\";";
 			
 			echo "fileTitleArray['$filename'] = \"".$titles[$idx]."\";";
@@ -30,7 +37,7 @@ function preloader() {
 }
 <?php if(false) { ?>
 /* Adds getElementsByClassName support */
-onload=function(){
+/*onload=function(){
 if (document.getElementsByClassName == undefined) {
 	document.getElementsByClassName = function(className)
 	{
@@ -48,7 +55,7 @@ if (document.getElementsByClassName == undefined) {
 		return results;
 	}
 }
-}
+}*/
 
 function setIdDisplay(objId, nDisplay) {
     var obj = document.getElementById(objId);
