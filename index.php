@@ -40,12 +40,6 @@
 	<head>
 		<title><?php printTitle(); ?></title>
 <?php	echo file_get_contents($FILEDIR."header.html");	?>
-<?php	if(ae_detect_ie()) {	?>
-			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/element/element-min.js"></script>
-			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/tabview/tabview-min.js"></script>
-			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/history/history-min.js"></script>
-<?php	}	?>
 		<style type="text/css">
 <?php	echo file_get_contents($CSSDIR."/default.css");	?>
 <?php	if(ae_detect_ie()) {	?>
@@ -90,6 +84,10 @@
 <?php		printContent();	?>
 		</div>
 <?php	jflush(); ?>
+<?php	if(ae_detect_ie()) {	?>
+			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+			<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/history/history-min.js"></script>
+<?php	}	?>
 <?php	include("includes/dynamic.inc");	?>
 	</body>
 </html>
