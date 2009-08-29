@@ -14,10 +14,9 @@ To add content in between the <head> tags, place it in 'files/header.html'.
 
 A 'images/' directory exists for images, but it has no particular hard-coded significance, and its usage is not a requirement.
 
-To clear the cache for a specific file, remove it from the 'cache/' directory. If you remove the entire directory, you will have to create a new, empty, chmodded one. Failure to do so will result in undefined behavior.
+To clear the cache for a specific file, remove it from the 'cache/' directory. If you remove the entire directory, you will have to create a new, chmodded one. Failure to do so will result in undefined behavior.
 
-The images.csv file contains a CSV list of images that need to be sent as separate MHTML images, for IE support when using embedded images (data: URIs). Their URLs are relative to the 'images/' directory.
-
+To add an embedded (data: URL) image, you must use the addEmbeddedImageToCSS(id, file); function. It returns part of the div (the <div id="$id"), assumes that file is in 'images/', and adds the image to a database, to be added to the CSS, and possibly MHTML (for IE.)
 
 Apache Configuration:
 
