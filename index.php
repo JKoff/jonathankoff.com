@@ -33,8 +33,15 @@
 			}
 			echo file_get_contents($indexcachefile);
 		} else {
+			$fp = fopen($indexcachefile, 'w');
+			fwrite($fp, "");
+			fclose($fp);
+			date_default_timezone_set('UTC');
+			//header("ETag: ",getETag($indexcachefile));
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T",filemtime($indexcachefile)));
+			header("Expires: ".gmdate("D, d M Y H:i:s \G\M\T",time()+$EXPIRETIME));
 			ob_start();
-			init_images();
+			ob_start(); init_images(); ob_clean();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -94,16 +101,14 @@
 </html>
 
 <?php	//stop_and_reveal_timer(); ?>
-<?php	$indexfin = ob_get_clean();
+<?php	$indexfin = ob_get_clean(); ob_start();
 		if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip'))
 			$indexfin = gzencode(/*preg_replace("/(\r\n|\n)/","",*/$indexfin/*)*/, 9);
 		$fp = fopen($indexcachefile, 'w');
 		fwrite($fp, $indexfin);
 		fclose($fp);
 		date_default_timezone_set('UTC');
-		//header("ETag: ",getETag($indexcachefile));
-		header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T",filemtime($indexcachefile)));
-		header("Expires: ".gmdate("D, d M Y H:i:s \G\M\T",time()+$EXPIRETIME));
+		ob_clean();
 		echo $indexfin;
 	}
 ?>
