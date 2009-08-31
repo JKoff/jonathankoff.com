@@ -5,7 +5,7 @@ function file_has_changed() {
 	$lines = explode("\n", $content);
 	$files = explode(",", $lines[0]);
 	$titles = explode(",", $lines[1]);
-	array_push($files, "../config.inc", "js/dynamic.js", "js/yahoo-min.js", "js/event-min.js", "js/history-min.js", "includes/util.inc");
+	array_push($files, "../config.inc", "js/dynamic.js", "js/yahoo-min.js", "js/event-min.js", "js/history-min.js", "includes/util.inc", "css/default.css", "css/allie.css", "css/ie6.css", "css/ie67.css");
 	$nargs = func_num_args(); $arg_list = func_get_args();
 	$timefile = $arg_list[0];
 	for($i=1; $i < $nargs; $i++) {
@@ -15,8 +15,10 @@ function file_has_changed() {
 	global $FILEDIR;
 	$ret = false;
 	foreach($files as $file) {
-		if(substr($file,0,2) != "js" &&
-			substr($file,0,2) != "in") $file = $FILEDIR.$file;
+		if(	substr($file,0,2) != "js" &&
+			substr($file,0,2) != "in" &&
+			substr($file,0,2) != "cs")
+				$file = $FILEDIR.$file;
 		if(!file_exists($timefile)) { $ret = true; break; }
 		if(filemtime($file) > filemtime($timefile)) {
 			$ret = true;

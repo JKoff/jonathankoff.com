@@ -76,6 +76,8 @@ function setIdContent(id, file) {
 	if(obj)
 		obj.innerHTML = fileContentArray[file];
 	document.title = fileTitleArray[file];
+	var a = "gmail.com";
+	if(file == "contact") document.getElementById("emailaddr").href = "mailto:jonathankoff"+"@"+a;
 }
 <?php	if(!ae_detect_ie()) {	?>
 function initNav() {

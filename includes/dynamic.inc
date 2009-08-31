@@ -1,6 +1,7 @@
 <?php
 echo '<script type="text/javascript">';
-echo "<!--\n";
+start_js();
+echo "\n";
 
 $br = 'gen';
 if(ae_detect_ie()) $br = 'ie';
@@ -32,5 +33,6 @@ if(file_has_changed($cachefile)) {
 	echo file_get_contents($cachefile);
 }
 
-echo "\n-->";
+echo "\n";
+end_js();
 echo '</script>';

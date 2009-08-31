@@ -1,0 +1,15 @@
+.contactname {
+	display: block;
+}
+.contactphone {
+	display: block;
+}
+.contactemail {
+	display: inline;
+}
+div#at {
+	display: inline;
+	white-space: pre;
+	margin-left: -2px;
+	margin-right: -6px;
+}

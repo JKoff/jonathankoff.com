@@ -36,6 +36,26 @@ function ae_detect_ie8()
     else
         return false;
 }
+function start_css() {
+	if(ae_detect_ie()) echo "";
+	else echo "<!--/*--><![CDATA[/*><!--*/";
+	echo "\n";
+}
+function end_css() {
+	echo "\n";
+	if(ae_detect_ie()) echo "";
+	else echo "/*]]>*/-->";
+}
+function start_js() {
+	if(ae_detect_ie()) echo "<!--";
+	else echo "<!--/*--><![CDATA[/*><!--*/";
+	echo "\n";
+}
+function end_js() {
+	echo "\n";
+	if(ae_detect_ie()) echo "-->";
+	else echo "/*]]>*/-->";
+}
 
 function printNavig($fmt) {
 	global $files;
@@ -94,7 +114,6 @@ function addEmbeddedImageToCSS($id, $file) {
 }
 function output_computed_css() {
 	global $cssids;
-	if(ae_detect_ie8())
 	if(ae_detect_ie() && !ae_detect_ie8()) {
 		echo "/*\r\n";
 		echo "Content-Type: multipart/related; boundary=\"_ANY_STRING_WILL_DO_AS_A_SEPARATOR\"\r\n\r\n";
