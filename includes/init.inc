@@ -9,9 +9,20 @@ $lines = explode("\n", $content);
 $files = explode(",", $lines[0]);
 $titles = explode(",", $lines[1]);
 
+function xhtml() {
+	return (!ae_detect_ie() && !detect_safari());
+}
+
+function detect_safari() {
+    if(isset($_SERVER['HTTP_USER_AGENT']) && 
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'Safari') !== false))
+        return true;
+    else
+		return false;
+}
 function detect_opera() {
     if(isset($_SERVER['HTTP_USER_AGENT']) && 
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'OPERA') !== false))
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false))
         return true;
     else
 		return false;
@@ -37,23 +48,23 @@ function ae_detect_ie8()
         return false;
 }
 function start_css() {
-	if(ae_detect_ie()) echo "";
+	if(!xhtml()) echo "";
 	else echo "<!--/*--><![CDATA[/*><!--*/";
 	echo "\n";
 }
 function end_css() {
 	echo "\n";
-	if(ae_detect_ie()) echo "";
+	if(!xhtml()) echo "";
 	else echo "/*]]>*/-->";
 }
 function start_js() {
-	if(ae_detect_ie()) echo "<!--";
+	if(!xhtml()) echo "<!--";
 	else echo "<!--/*--><![CDATA[/*><!--*/";
 	echo "\n";
 }
 function end_js() {
 	echo "\n";
-	if(ae_detect_ie()) echo "-->";
+	if(!xhtml()) echo "-->";
 	else echo "/*]]>*/-->";
 }
 
@@ -86,7 +97,7 @@ function addEmbeddedImageToCSS($id, $file) {
 	$sz = getimagesize($file);
 	$w = $sz[0];
 	$h = $sz[1];
-	$outfmt = "<div id='$id'";
+	$outfmt = "<span id='$id'";
 	
 	$fileparts = explode(".", $file);
 	$fileext = $fileparts[count($fileparts)-1];

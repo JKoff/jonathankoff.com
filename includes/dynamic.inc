@@ -6,6 +6,8 @@ echo "\n";
 
 $br = 'gen';
 if(ae_detect_ie()) $br = 'ie';
+if(ae_detect_ie8()) $br = 'ie8';
+if(detect_safari()) $br = 'saf';
 $cachefile = $CACHEDIR."jsfiles.js.".$br;
 if(file_has_changed($cachefile)) {
 	ob_start();
