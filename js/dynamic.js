@@ -1,5 +1,4 @@
-<?php	if(detect_opera()) return;
-		$content = trim(file_get_contents("files.csv"));
+<?php	$content = trim(file_get_contents("files.csv"));
 		$lines = explode("\n", $content);
 		$files = explode(",", $lines[0]);
 		$titles = explode(",", $lines[1]);
@@ -79,7 +78,7 @@ function setIdContent(id, file) {
 	var a = "gmail.com";
 	if(file == "contact") document.getElementById("emailaddr").href = "mailto:jonathankoff"+"@"+a;
 }
-<?php	if(!ae_detect_ie()) {	?>
+<?php	if(!ae_detect_ie() || ae_detect_ie8()) {	?>
 function initNav() {
 	var anchors, i, len, anchor, href, section, currentSection;
 	anchors = document.getElementById("nav").getElementsByTagName("a");
@@ -88,7 +87,8 @@ function initNav() {
 		YAHOO.util.Event.addListener(anchor, "click", function (evt) {
 			href = this.getAttribute("href");
 			patharr = href.split('/');
-			section = patharr[patharr.length-2] || "home";
+<?php		if(ae_detect_ie8()) echo "alt = patharr[0].substring(1);";	?>
+			section = patharr[patharr.length-2] || alt || "home";
 			try {
 				YAHOO.util.History.navigate("page", section);
 			} catch(e) {
